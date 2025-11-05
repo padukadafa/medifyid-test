@@ -4,9 +4,10 @@ namespace App\Exports;
 
 use App\Models\MasterItem;
 use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 
-class MasterItemExport implements FromCollection, WithHeadings
+class MasterItemExport implements FromCollection, WithHeadings, WithColumnFormatting
 {
     /**
     * @return \Illuminate\Support\Collection
@@ -38,4 +39,12 @@ class MasterItemExport implements FromCollection, WithHeadings
             'Harga Jual',
         ];
     }
+        public function columnFormats(): array
+    {
+        return [
+            'E' => '"Rp"#,##0', 
+            'G' => '"Rp"#,##0', 
+        ];
+    }
+
 }

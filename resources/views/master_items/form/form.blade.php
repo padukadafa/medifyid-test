@@ -60,21 +60,32 @@
 
             <label>Kategori</label>
 
-            @foreach ($categories as $category)
-                <div class="form-check">
+            @if ($item->categories ?? false)
+                @foreach ($categories as $category)
+                    <div class="form-check">
 
-                    <input class="form-check-input" type="checkbox" name="categories[]" value="{{ $category->kode }}"
-                        @if (in_array($category->kode, old('categories', $item->categories->pluck('kode')->toArray()))) checked @endif>
-                    <label class="form-check-label">{{ $category->nama }}</label>
-                </div>
-            @endforeach
+                        <input class="form-check-input" type="checkbox" name="categories[]"
+                            value="{{ $category->kode }}" @if (in_array($category->kode, old('categories', $item->categories->pluck('kode')->toArray()))) checked @endif>
+                        <label class="form-check-label">{{ $category->nama }}</label>
+                    </div>
+                @endforeach
+            @else
+                @foreach ($categories as $category)
+                    <div class="form-check">
+
+                        <input class="form-check-input" type="checkbox" name="categories[]"
+                            value="{{ $category->kode }}" @if (in_array($category->kode, old('categories', []))) checked @endif>
+                        <label class="form-check-label">{{ $category->nama }}</label>
+                    </div>
+                @endforeach
+            @endif
         </div>
 
 
         <div class="form-group">
             <label>Foto</label>
 
-            @if ($item->foto)
+            @if ($item->foto ?? false)
                 <div class="mb-2">
                     <img src="{{ asset('storage/' . $item->foto) }}" alt="Foto"
                         style="max-width: 200px; max-height: 200px;">
