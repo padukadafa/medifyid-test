@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Kategori;
 use App\Models\MasterItem;
 use Illuminate\Http\Request;
 
@@ -23,7 +24,8 @@ class MasterItemsController extends Controller
 
         if (!empty($kode)) $data_search = $data_search->where('kode', $kode);
         if (!empty($nama)) $data_search = $data_search->where('nama', 'LIKE', '%' . $nama . '%');
-        if (!empty($hargamin)) $data_search = $data_search->where('harga_beli', '>=', $hargamin)->where('harga_beli', '<=', $hargamax);
+        if (!empty($hargamin)) $data_search = $data_search->where('harga_beli', '>=', $hargamin);
+        if (!empty($hargamax)) $data_search = $data_search->where('harga_beli', '<=', $hargamax);
 
         $data_search = $data_search->select('kode', 'nama', 'jenis', 'harga_beli', 'laba', 'supplier')->orderBy('id')->get();
 
@@ -41,6 +43,7 @@ class MasterItemsController extends Controller
         } else {
             $item = MasterItem::find($id);
         }
+        $data['kategoris'] = Kategori::all();
         $data['item'] = $item;
         $data['method'] = $method;
         return view('master_items.form.index', $data);
@@ -64,11 +67,17 @@ class MasterItemsController extends Controller
             $data_item = MasterItem::find($id);
             $kode = $data_item->kode;
         }
+        
+        $file = $request->file('foto');
+        $filePath = $file->store('images', 'public');
+        $filename = time() . '_' . $file->getClientOriginalName();
+        $data_item->image = '/storage/' . $filePath;
 
         $data_item->nama = $request->nama;
         $data_item->harga_beli = $request->harga_beli;
         $data_item->laba = $request->laba;
         $data_item->kode = $kode;
+        $data_item->kode_kategori = $request->kode_kategori;
         $data_item->supplier = $request->supplier;
         $data_item->jenis = $request->jenis;
         $data_item->save();
