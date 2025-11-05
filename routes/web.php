@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -31,3 +32,9 @@ Route::get('/master-items/delete/{id}', [App\Http\Controllers\MasterItemsControl
 
 
 Route::get('/master-items/update-random-data', [App\Http\Controllers\MasterItemsController::class, 'updateRandomData']);
+Route::get('/kategori',[App\Http\Controllers\KategoriController::class, 'index']);
+Route::get('/kategori/form/{method}/{id?}', [App\Http\Controllers\KategoriController::class, 'formView']);
+Route::post('/kategori/form/{method}/{id?}', [App\Http\Controllers\KategoriController::class, 'formSubmit']);
+Route::get('/kategori/view/{kode}', [App\Http\Controllers\KategoriController::class, 'singleView']);
+Route::get('/kategori/delete/{kode}', [App\Http\Controllers\KategoriController::class, 'delete']);
+Route::get('/kategori/export-pdf/{kode}', [App\Http\Controllers\KategoriController::class, 'exportPDF'])->name('kategori.exportPDF');

@@ -3,8 +3,17 @@
     <div class="row">
         <div class="col-4">
             <div class="form-group" id="filter-container">
-                <label>Kode</label>
-                <input type="text" class="form-control" id="filter-kode">
+                @php $selected = $item->kode_kategori ?? ''; @endphp
+                <div class="form-group">
+                    <label>Kategori</label>
+                    <select class="form-control" required name="kode_kategori" id="filter-kategori">
+                        <option @if ($selected == '') selected @endif value="">--Pilih--</option>
+                        @foreach ($kategoris as $kategori)
+                            <option @if ($selected == $kategori->kode) selected @endif value="{{ $kategori->kode }}">
+                                {{ $kategori->nama }}</option>
+                        @endforeach
+                    </select>
+                </div>
             </div>
         </div>
         <div class="col-4">

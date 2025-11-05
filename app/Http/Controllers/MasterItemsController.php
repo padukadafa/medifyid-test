@@ -4,25 +4,29 @@ namespace App\Http\Controllers;
 
 use App\Models\Kategori;
 use App\Models\MasterItem;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
 class MasterItemsController extends Controller
 {
     public function index()
     {
-        return view('master_items.index.index');
+        $kategoris = Kategori::all();
+        return view('master_items.index.index', compact('kategoris'));
     }
 
     public function search(Request $request)
     {
-        $kode = $request->kode;
+        $kategori = $request->kategori;
         $nama = $request->nama;
         $hargamin = $request->hargamin;
         $hargamax = $request->hargamax;
 
         $data_search = MasterItem::query();
-
-        if (!empty($kode)) $data_search = $data_search->where('kode', $kode);
+        
+        if (!empty($kategori)) {
+            $data_search = $data_search->where('kode_kategori', $kategori);
+        }
         if (!empty($nama)) $data_search = $data_search->where('nama', 'LIKE', '%' . $nama . '%');
         if (!empty($hargamin)) $data_search = $data_search->where('harga_beli', '>=', $hargamin);
         if (!empty($hargamax)) $data_search = $data_search->where('harga_beli', '<=', $hargamax);
@@ -121,4 +125,5 @@ class MasterItemsController extends Controller
         $random = rand(0,4);
         return $array[$random];
     }
+    
 }
