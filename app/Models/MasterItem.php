@@ -11,8 +11,7 @@ class MasterItem extends Model
     use HasFactory;
     use SoftDeletes;
 
-    public function kategori()
-    {
-        return $this->belongsTo(Kategori::class, 'kode_kategori', 'kode');
+    public function categories() {
+        return $this->belongsToMany(Kategori::class, 'master_item_kategoris', 'id_master_item', 'kode_kategori');
     }
 }

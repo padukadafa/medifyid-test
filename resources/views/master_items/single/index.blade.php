@@ -46,7 +46,7 @@
                                 <tr>
                                     <th>Kategori</th>
                                     <td>:</td>
-                                    <td>{{ $data->kategori->nama ?? 'N/A' }}</td>
+                                    <td>{{ $data->categories->pluck('nama')->join(', ') ?? 'N/A' }}</td>
                                 </tr>
                             </table>
                             <div class="col"> <img src="{{ asset($data->image) }}" class="img-thumbnail  "alt="foto">

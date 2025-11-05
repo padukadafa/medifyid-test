@@ -54,7 +54,7 @@ class KategoriController extends Controller
     }
     public function exportPDF($kode)
     {
-        $kategori = Kategori::where('kode', $kode)->with('master_items')->first();
+        $kategori = Kategori::where('kode', $kode)->with('master_item')->first();
         
         // return view('kategori.pdf.index', data: compact('kategori'));
         $pdf = Pdf::loadView('kategori.pdf.index', compact('kategori'));

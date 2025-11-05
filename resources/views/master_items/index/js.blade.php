@@ -31,6 +31,12 @@
         var filter_harga_min = $('#filter-harga-min').val()
         var filter_harga_max = $('#filter-harga-max').val()
         dataTableObj.clear().draw();
+        if (parseInt(filter_harga_min) > parseInt(filter_harga_max) && filter_harga_max != '' && filter_harga_min !=
+            '') {
+            alert('Harga Min tidak boleh lebih besar dari Harga Max')
+            $('#loading-filter').hide();
+            return;
+        }
 
         $.ajax({
             url: '{{ url('master-items/search') }}',

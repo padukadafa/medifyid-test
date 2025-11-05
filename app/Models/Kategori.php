@@ -18,8 +18,8 @@ class Kategori extends Model
 
     protected $fillable = ['nama', 'kode'];
 
-    public function master_items()
+    public function master_item()
     {
-        return $this->hasMany(MasterItem::class, 'kode_kategori', 'kode');
+        return $this->belongsToMany(MasterItem::class, 'master_item_kategoris', 'kode_kategori', 'id_master_item');
     }
 }

@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\MasterItemExport;
 use App\Models\Kategori;
 use App\Models\MasterItem;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class MasterItemsController extends Controller
 {
@@ -25,7 +27,9 @@ class MasterItemsController extends Controller
         $data_search = MasterItem::query();
         
         if (!empty($kategori)) {
-            $data_search = $data_search->where('kode_kategori', $kategori);
+            $data_search = $data_search->whereHas('categories', function($query) use ($kategori) {
+    $query->where('kategoris.kode', $kategori);
+});
         }
         if (!empty($nama)) $data_search = $data_search->where('nama', 'LIKE', '%' . $nama . '%');
         if (!empty($hargamin)) $data_search = $data_search->where('harga_beli', '>=', $hargamin);
@@ -47,7 +51,7 @@ class MasterItemsController extends Controller
         } else {
             $item = MasterItem::find($id);
         }
-        $data['kategoris'] = Kategori::all();
+        $data['categories'] = Kategori::all();
         $data['item'] = $item;
         $data['method'] = $method;
         return view('master_items.form.index', $data);
@@ -72,19 +76,24 @@ class MasterItemsController extends Controller
             $kode = $data_item->kode;
         }
         
-        $file = $request->file('foto');
-        $filePath = $file->store('images', 'public');
-        $filename = time() . '_' . $file->getClientOriginalName();
-        $data_item->image = '/storage/' . $filePath;
-
+        if ($request->hasFile('foto')) {
+            $file = $request->file('foto');
+            $filePath = $file->store('images', 'public');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $data_item->image = '/storage/' . $filePath;
+        }
+        $validate = $request->validate([
+            'categories' => 'required|array',
+            'categories.*' => 'exists:kategoris,kode',
+        ]);
         $data_item->nama = $request->nama;
         $data_item->harga_beli = $request->harga_beli;
         $data_item->laba = $request->laba;
         $data_item->kode = $kode;
-        $data_item->kode_kategori = $request->kode_kategori;
         $data_item->supplier = $request->supplier;
         $data_item->jenis = $request->jenis;
         $data_item->save();
+        $data_item->categories()->sync($request->categories);
 
         return redirect('master-items');
     }
@@ -124,6 +133,10 @@ class MasterItemsController extends Controller
         $array = ['Obat','Alkes','Matkes','Umum','ATK'];
         $random = rand(0,4);
         return $array[$random];
+    }
+    public function exportExcel()
+    {
+        return Excel::download(new MasterItemExport, 'master_items.xlsx');
     }
     
 }

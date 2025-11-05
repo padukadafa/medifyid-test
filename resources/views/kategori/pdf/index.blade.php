@@ -56,7 +56,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($kategori->master_items as $i => $item)
+                @foreach ($kategori->master_item as $i => $item)
                     <tr>
                         <td>{{ $i + 1 }}</td>
                         <td>{{ $item->kode }}</td>

@@ -13,10 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('master_items', function (Blueprint $table) {
-            $table->string('kode_kategori')->nullable();
-            $table->foreign('kode_kategori')->references('kode')->on('kategoris')->onDelete('set null');
-        });
+        
+
     }
 
     /**

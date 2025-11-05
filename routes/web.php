@@ -38,3 +38,4 @@ Route::post('/kategori/form/{method}/{id?}', [App\Http\Controllers\KategoriContr
 Route::get('/kategori/view/{kode}', [App\Http\Controllers\KategoriController::class, 'singleView']);
 Route::get('/kategori/delete/{kode}', [App\Http\Controllers\KategoriController::class, 'delete']);
 Route::get('/kategori/export-pdf/{kode}', [App\Http\Controllers\KategoriController::class, 'exportPDF'])->name('kategori.exportPDF');
+Route::get('/master-items/export-excel', [App\Http\Controllers\MasterItemsController::class, 'exportExcel'])->name('master-items.exportPDF');
